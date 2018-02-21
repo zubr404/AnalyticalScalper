@@ -1,0 +1,307 @@
+﻿<Window
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:sys ="clr-namespace:System;assembly=mscorlib"
+        xmlns:c="clr-namespace:AnalyticalScalper.ViewModels"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d" x:Class="AnalyticalScalper.MainWindow"
+        Title="MainWindow" Height="550" Width="825" WindowState="Maximized" Activated="Window_Activated" Deactivated="Window_Deactivated" KeyDown="Window_KeyDown" Background="#FF858585">
+    <Window.Resources>
+        <c:ViewModel x:Key="ViModel"/>
+    </Window.Resources>
+    <Window.DataContext>
+        <Binding Source="{StaticResource ViModel}"/>
+    </Window.DataContext>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="2*"/>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="1*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+
+        <!--Фон-->
+        <StackPanel Grid.Row="1" Margin="5" Background="#FF646464" />
+        <StackPanel Grid.Row="2" Margin="5" Background="#FF646464" />
+        <StackPanel Grid.Row="3" Margin="5" Background="#FF646464" />
+
+        <!--END-->
+
+
+        <!--CHARTS PRICE-->
+        <Border Grid.Row="1" Margin="5" BorderThickness="0.5" BorderBrush="Black">
+            <Border Margin="5" BorderThickness="0.5" BorderBrush="Black">
+            <Grid>
+               
+                    <!--AllPrice--><Canvas Margin="{Binding ElementName=CanvasPrice, Path=Margin}">
+                    <!--LineCurrentPrice--><Line X1="0" Y1="{Binding Path=FactoryCharts.PriceChart.YCoordinateLine, Mode=OneWay}"
+                              X2="{Binding ElementName=CanvasPrice, Path=ActualWidth}"
+                              Y2="{Binding Path=FactoryCharts.PriceChart.YCoordinateLine, Mode=OneWay}"
+                              StrokeThickness="0.5" Stroke="White"></Line>
+                                           <Grid Canvas.Left="{Binding ElementName=CanvasPrice, Path=ActualWidth}"
+                              Canvas.Top="{Binding Path=FactoryCharts.PriceChart.YCoordinateLine, Mode=OneWay}">
+                            <Label Margin="2,0,0,0" Content="{Binding Path=FactoryCharts.PriceChart.CurrentValue, Mode=OneWay}"
+                                   Foreground="White"></Label>
+                        </Grid>
+
+                        
+                        <Rectangle Width="{Binding ElementName=CanvasPrice, Path=ActualWidth}" Height="1"
+                                   Canvas.Left="0" Canvas.Bottom="{Binding Path=FactoryCharts.PriceCurrentPosition.Y, Mode=OneWay}"
+                                   Fill="LightCoral">
+                        </Rectangle>
+                    </Canvas>
+                <ItemsControl x:Name="CanvasPrice" BorderThickness="1" BorderBrush="{x:Null}"
+			                  Margin="10,10,70,10" 
+                              ItemsSource="{Binding Path=FactoryCharts.PriceChart.ElementsChart, IsAsync=True, Mode=OneTime}" 
+			                  Loaded="CanvasPrice_Loaded">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <Canvas Background="{x:Null}"/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Rectangle/>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+
+                <!--ДОПОЛНИТЕЛЬНАЯ ПАНЕЛЬ-->
+                <Canvas x:Name="AdditionalInformationPanel" Margin="{Binding ElementName=CanvasPrice, Path=Margin}">
+                    <!--ЛЕНТА СДЕЛОК-->
+                    <StackPanel x:Name="TapeTrades" Opacity="0.15" Background="#7F4B4B4B"
+                        Canvas.Left="{Binding Path=FactoryCharts.MultiDependetPanelTrades.FullyDependentPanel.X, Mode=OneWay}"
+                        Canvas.Bottom="{Binding Path=FactoryCharts.MultiDependetPanelTrades.FullyDependentPanel.Y, Mode=OneWay}" SizeChanged="TapeTrades_SizeChanged">
+
+                        <!--TapeTradesEveryVolume-->
+                        <ItemsControl ItemsSource="{Binding Path=FactoryCharts.TapeTradesEveryVolume.drawElementCollection}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Ellipse/>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <StackPanel Margin="0,15,10,0" Orientation="Horizontal" FlowDirection="RightToLeft"/>
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                        </ItemsControl>
+
+                        <!--TapeTradesSumOperation-->
+                        <ItemsControl ItemsSource="{Binding Path=FactoryCharts.TapeTradesSumOperation.drawElementCollection}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Ellipse/>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <StackPanel Margin="0,15,10,0" Orientation="Horizontal" FlowDirection="RightToLeft"/>
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                        </ItemsControl>
+                    </StackPanel>
+
+                    <!--OFFER-->
+                    <Label x:Name="OfferPanel" Width="Auto" HorizontalContentAlignment="Center" 
+				            Content="{Binding Path=FactoryCharts.OfferPanel.InputValue, Mode=OneWay}"
+				            BorderBrush="Coral" Foreground="#FFFFD2C2" BorderThickness="0,0,0,1"
+				            FontWeight="Normal" FontSize="9"
+				            Background="#598F8F8F"
+                           Canvas.Left="{Binding Path=FactoryCharts.OfferPanel.X_panel}"
+                           Canvas.Bottom="{Binding Path=FactoryCharts.OfferPanel.Y_tape}"/>
+                    <!--BID-->                    
+                    <Label x:Name="BidPanel" Width="Auto" HorizontalContentAlignment="Center" 
+				            Content="{Binding Path=FactoryCharts.BidPanel.InputValue, Mode=OneWay}"
+				            BorderBrush="LimeGreen" Foreground="#FFD5FFD5" BorderThickness="0,1,0,0"
+				            FontWeight="Normal" FontSize="9"
+				            Background="#598F8F8F"
+                           Canvas.Left="{Binding Path=FactoryCharts.BidPanel.X_panel}"
+                           Canvas.Bottom="{Binding Path=FactoryCharts.BidPanel.Y_tape}"/>
+                </Canvas>
+                <!--end-->
+                    <Label Background="#FF5A7373" Foreground="AliceBlue" Width="Auto" Height="Auto" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="0">Price</Label>
+                </Grid>
+            
+        </Border>
+        
+        </Border>
+        <!--SPEED PRICE CHARTS-->
+        <Border Grid.Row="3" Margin="5" BorderThickness="0.5" BorderBrush="Black">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+
+                <!-- SpeedPrice-->
+                <Border Grid.ColumnSpan="2" Margin="5" BorderThickness="0.5" BorderBrush="Black">
+                    <Grid>
+                        <!--Line--><Canvas Margin="{Binding ElementName=CanvasSpeedPrice, Path=Margin}">
+                            <Line X1="0" Y1="{Binding Path=FactoryCharts.SpeedTradeTickChart.YCoordinateLine, Mode=OneWay}"
+                              X2="{Binding ElementName=CanvasSpeedPrice, Path=ActualWidth}"
+                              Y2="{Binding Path=FactoryCharts.SpeedTradeTickChart.YCoordinateLine, Mode=OneWay}"
+                              StrokeThickness="0.5" Stroke="White"></Line>
+                            <Grid Canvas.Left="{Binding ElementName=CanvasSpeedPrice, Path=ActualWidth}"
+                              Canvas.Top="{Binding Path=FactoryCharts.SpeedTradeTickChart.YCoordinateLine, Mode=OneWay}">
+                                <Label Margin="2,0,0,0" Content="{Binding Path=FactoryCharts.SpeedTradeTickChart.CurrentValue}"
+                                   Foreground="White"></Label>
+                            </Grid>
+                        </Canvas>
+                        <!--Gistogram--><ItemsControl x:Name="CanvasSpeedPrice" ItemsSource="{Binding Path=FactoryCharts.SpeedTradeTickChart.ElementsChart, IsAsync=True, Mode=OneTime}" 
+			                        Loaded="CanvasSpeedPrice_Loaded" Margin="10,10,70,10" BorderThickness="1" 
+                                      BorderBrush="{x:Null}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <Canvas Background="{x:Null}"/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Rectangle/>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                        <!--AveragePeriod-->
+                        <Rectangle Height="{Binding Path=FactoryCharts.SpeedTradesPerAvChart.Y, Mode=OneWay}"
+                                   Width="{Binding ElementName=CanvasSpeedPrice, Path=ActualWidth}"
+                                   Margin="{Binding ElementName=CanvasSpeedPrice, Path=Margin}"
+                                   VerticalAlignment="Bottom" Fill="#7FEEAFDD">
+                        </Rectangle>
+                        <!--AverageDayli-->
+                        <Rectangle Height="{Binding Path=FactoryCharts.SpeedTradesDayAvChart.Y, Mode=OneWay}" 
+                                   Width="{Binding ElementName=CanvasSpeedPrice, Path=ActualWidth}"
+                                   Margin="{Binding ElementName=CanvasSpeedPrice, Path=Margin}"
+                                   VerticalAlignment="Bottom" Fill="#4CAFEEEE">
+                        </Rectangle>
+                        
+                        <!--Trend--><Grid x:Name="GridTrend" HorizontalAlignment="Right" Width="50">
+                            <Canvas x:Name="CanvasTrend" Loaded="CanvasTrend_Loaded">
+                                <Rectangle Fill="PaleTurquoise" Height="1" Width="{Binding ElementName=GridTrend, Path=Width}"
+                                           Canvas.Top="{Binding Path=FactoryCharts.MarketTrendChart.Y, Mode=OneWay}"></Rectangle>
+                            </Canvas>
+                            <Rectangle Fill="AliceBlue" VerticalAlignment="Center" Height="1"></Rectangle>
+                            <Label VerticalAlignment="Top" HorizontalAlignment="Left"
+                                   Margin="-50,0,0,0" Foreground="White"
+                                   Content="{Binding Path=FactoryCharts.MarketTrendChart.TrendValue, Mode=OneWay}"></Label>
+                        </Grid>
+                    </Grid>
+                </Border>
+                <Label Background="#FF5A7373" Foreground="AliceBlue" Width="Auto" Height="Auto" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="5">Speed price</Label>
+
+                <!--SpeedTickBuy
+                <Border Grid.Column="1" Margin="5" BorderThickness="0.5" BorderBrush="Black">
+                    <ItemsControl x:Name="CanvasSpeedTickBuy" ItemsSource="{Binding Path=FactoryCharts.SpeedTickBuyChart.ElementsChart, IsAsync=True, Mode=OneTime}" 
+			            Loaded="CanvasSpeedTickBuy_Loaded" Margin="5,5,35,5">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <Canvas Background="{x:Null}"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Rectangle/>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>                    
+                </Border>
+                <Label Grid.Column="1" Background="#1901FFFF" Foreground="AliceBlue" Width="Auto" Height="Auto"
+                       HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="5">Speed tick buy</Label>-->
+            </Grid>            
+        </Border>
+
+        <!--TREND GISTOGRAM-->
+        <Border Grid.Row="2" Margin="5" BorderThickness="0.5" BorderBrush="Black">
+            <Border Margin="5" BorderThickness="0.5" BorderBrush="Black">
+                <Grid>
+                    <ItemsControl x:Name="CanvasTrendGisgram" BorderThickness="1" BorderBrush="{x:Null}"
+			                  Margin="10,10,70,10" Opacity="50"
+                              ItemsSource="{Binding Path=FactoryCharts.MarketTrendGisgramChart.ElementsChart, IsAsync=True, Mode=OneWay}" Loaded="CanvasTrendGisgram_Loaded" 
+			                  >
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <Canvas Background="{x:Null}"/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Rectangle/>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                    <Label Background="#FF5A7373" Foreground="AliceBlue" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="5">Trend</Label>
+                </Grid>
+            </Border>
+        </Border>
+        
+
+        <!--Trader Panel-->
+        <Border x:Name="TradesPanel" Grid.Row="1" Grid.Column="1" Grid.RowSpan="10" Margin="5,5,10,5" BorderBrush="Black" 
+			BorderThickness="0.5" VerticalAlignment="Stretch" Opacity="1">
+            <Border.Resources>
+                <SolidColorBrush x:Key="ForeBrush" Color="Gainsboro"/>
+            </Border.Resources>
+            <StackPanel Background="#FF646464">
+                <StackPanel Orientation="Horizontal">
+                    <StackPanel>
+                        <Label Width="25" HorizontalContentAlignment="Center" FontSize="10" Foreground="{StaticResource ForeBrush}" Content="Pos:"/>
+                        <Label Width="65" HorizontalContentAlignment="Center" Foreground="{StaticResource ForeBrush}"
+							Content="{Binding Path=TraderData.CurrentPosition, Mode=OneWay}"/>
+                    </StackPanel>
+                    <StackPanel>
+                        <Label Width="65" HorizontalContentAlignment="Center" FontSize="10" Foreground="{StaticResource ForeBrush}" Content="Price:"/>
+                        <Label Width="65" HorizontalContentAlignment="Center" Content="{Binding Path=TraderData.PricePosition, Mode=OneWay}" Foreground="{StaticResource ForeBrush}"/>
+                    </StackPanel>
+                    <StackPanel>
+                        <Label Width="65" HorizontalContentAlignment="Center" FontSize="10" Foreground="{StaticResource ForeBrush}" Content="Variational:"/>
+                        <Label Width="65" HorizontalContentAlignment="Center" Content="{Binding Path=TraderData.Varitional, Mode=OneWay}" Foreground="{StaticResource ForeBrush}"/>
+                    </StackPanel>
+                </StackPanel>
+
+                <StackPanel>
+                    <Label Width="65" HorizontalContentAlignment="Center" HorizontalAlignment="Left" FontSize="10" Foreground="{StaticResource ForeBrush}" Content="Profit (point):"/>
+                    <Label Width="65" HorizontalContentAlignment="Center" HorizontalAlignment="Left" Content="{Binding Path=TraderData.ProfitTotal, Mode=OneWay}" Foreground="{StaticResource ForeBrush}"/>
+                </StackPanel>
+                <StackPanel>
+                    <Label Width="75" HorizontalContentAlignment="Center" HorizontalAlignment="Left" FontSize="10" Foreground="{StaticResource ForeBrush}" Content="Count trades:"/>
+                    <Label Width="65" HorizontalContentAlignment="Center" HorizontalAlignment="Left" Content="{Binding Path=TraderData.CountTrades, Mode=OneWay}" Foreground="{StaticResource ForeBrush}"/>
+                </StackPanel>
+                <Border BorderBrush="Black" BorderThickness="0,0.5,0,0.5" Margin="0,5">
+                    <StackPanel Orientation="Horizontal">
+                        <StackPanel.Resources>
+                            <sys:Double x:Key="H_element">25</sys:Double>
+                            <sys:Double x:Key="W_element">70</sys:Double>
+
+                            <Style x:Key="LabHeader" TargetType="{x:Type Label}">
+                                <Setter Property="Height" Value="{StaticResource H_element}"/>
+                                <Setter Property="Width" Value="{StaticResource W_element}"/>
+                                <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                                <Setter Property="HorizontalAlignment" Value="Stretch"/>
+                                <Setter Property="VerticalContentAlignment" Value="Center"/>
+                                <Setter Property="FontSize" Value="10"/>
+                                <Setter Property="Foreground" Value="{StaticResource ForeBrush}"/>
+                            </Style>
+                        </StackPanel.Resources>
+                        <StackPanel>
+                            <Label Style="{StaticResource LabHeader}" Content="SP"/>
+                            <Label Style="{StaticResource LabHeader}" Content="{Binding Path=TraderData.ProfitValue}"/>
+                        </StackPanel>
+                        <StackPanel>
+                            <Label Style="{StaticResource LabHeader}" Content="SL"/>
+                            <Label Style="{StaticResource LabHeader}" Content="{Binding Path=TraderData.LossValue}"/>
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+
+            </StackPanel>
+        </Border>
+        
+        
+
+        <Canvas x:Name="CanvasGlass" Grid.Row="1" Grid.RowSpan="10" MouseMove="CanvasGlass_MouseMove" Background="#00000000" d:IsHidden="True"/>
+
+    </Grid>
+</Window>

@@ -1,0 +1,15 @@
+D:\C\AnalyticalScalper-ветвь\AnalyticalScalper\bin\Release\AnalyticalScalper.exe.config
+D:\C\AnalyticalScalper-ветвь\AnalyticalScalper\bin\Release\AnalyticalScalper.exe
+D:\C\AnalyticalScalper-ветвь\AnalyticalScalper\bin\Release\AnalyticalScalper.pdb
+D:\C\AnalyticalScalper-ветвь\AnalyticalScalper\obj\Release\MainWindow.g.cs
+D:\C\AnalyticalScalper-ветвь\AnalyticalScalper\obj\Release\App.g.cs
+D:\C\AnalyticalScalper-ветвь\AnalyticalScalper\obj\Release\GeneratedInternalTypeHelper.g.cs
+D:\C\AnalyticalScalper-ветвь\AnalyticalScalper\obj\Release\AnalyticalScalper_MarkupCompile.cache
+D:\C\AnalyticalScalper-ветвь\AnalyticalScalper\obj\Release\AnalyticalScalper_MarkupCompile.lref
+D:\C\AnalyticalScalper-ветвь\AnalyticalScalper\obj\Release\MainWindow.baml
+D:\C\AnalyticalScalper-ветвь\AnalyticalScalper\obj\Release\AnalyticalScalper.g.resources
+D:\C\AnalyticalScalper-ветвь\AnalyticalScalper\obj\Release\AnalyticalScalper.Properties.Resources.resources
+D:\C\AnalyticalScalper-ветвь\AnalyticalScalper\obj\Release\AnalyticalScalper.csproj.GenerateResource.Cache
+D:\C\AnalyticalScalper-ветвь\AnalyticalScalper\obj\Release\AnalyticalScalper.exe
+D:\C\AnalyticalScalper-ветвь\AnalyticalScalper\obj\Release\AnalyticalScalper.pdb
+D:\C\AnalyticalScalper-ветвь\AnalyticalScalper\obj\Release\AnalyticalScalper.csprojResolveAssemblyReference.cache
